@@ -55,7 +55,7 @@ validateEnvelope = (envelope) ->
     unless envelope.hasOwnProperty attribute
       console.log "Envelope missing #{attribute}"
       return false
-    unless no validation or String(envelope[attribute]).match validation
+    unless !validation or String(envelope[attribute]).match validation
       console.log "Validation for #{attribute} failed"
       return false
 
