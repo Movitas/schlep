@@ -31,8 +31,7 @@ redis.on       'error', (err) -> console.log "redis error: #{err}"
 redis_block.on 'error', (err) -> console.log "redis_block error: #{err}"
 
 # Once Redis is ready, we can start processing envelopes from the queue
-redis.on 'ready', ->
-  createProcessor()
+redis_block.on 'ready', -> createProcessor()
 
 # A processor does a blocking-left-pop on the schlep key. When a message is
 # received and processed, it simply spawns another one of itself.
