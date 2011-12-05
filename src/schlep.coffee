@@ -7,8 +7,8 @@ url      = require 'url'
 redis_url = process.env.REDIS_URL or process.env.REDISTOGO_URL
 
 if redis_url
-  redis_parsed_url = url.parse process.env.REDISTOGO_URL
-  redis_password = redis_url.auth.split(":")[1]
+  redis_parsed_url = url.parse redis_url
+  redis_password = redis_parsed_url.auth.split(":")[1]
   redis = redislib.createClient redis_parsed_url.port, redis_parsed_url.hostname
   redis.auth redis_password
 else
