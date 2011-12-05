@@ -46,7 +46,8 @@ handleInput = (data) ->
     console.log "Invalid JSON: #{data}"
     return
 
-  # If the validation fails, exit
+  # If the validation fails, we just exit, since the validation error is
+  # already output by the validtion function
   return unless validateEnvelope(envelope)
 
   # All messages are published to an event key for each type
