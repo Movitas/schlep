@@ -1,6 +1,6 @@
 {
     "name": "schlep",
-    "description": "SCalable High Load Event Processor",
+    "description": "Schlep provides a simple interface for logging and broadcasting events.",
     "author": "Justin Campbell",
     "version": "0.0.0",
     "licenses": [{
