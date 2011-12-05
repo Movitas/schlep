@@ -18,7 +18,6 @@ redis.on 'error', (err) ->
   console.log "Redis error: #{err}"
 
 redis.on 'ready', ->
-  console.log "Ready"
   createProcessor()
 
 createProcessor = ->
