@@ -1,7 +1,13 @@
 console.log "\nSchlep 0.0.0"
 
+http     = require 'http'
 redislib = require 'redis'
 url      = require 'url'
+
+http.createServer( (req, res) ->
+  res.writeHead 200, {'Content-Type': 'text/plain'}
+  res.end 'Schlep 0.0.0\n'
+).listen process.env.PORT or 3000
 
 # Redis
 redis_url = process.env.REDIS_URL or process.env.REDISTOGO_URL
