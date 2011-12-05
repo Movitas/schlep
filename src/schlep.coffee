@@ -17,11 +17,12 @@ http.createServer( (req, res) ->
 redis_url = process.env.REDIS_URL or process.env.REDISTOGO_URL
 
 if redis_url
-  redis_parsed_url = url.parse redis_url
-  redis_password = redis_parsed_url.auth.split(":")[1]
-  redis       = redislib.createClient redis_parsed_url.port, redis_parsed_url.hostname
-  redis_block = redislib.createClient redis_parsed_url.port, redis_parsed_url.hostname
-  redis.auth redis_password
+  redis_parsed_url  = url.parse redis_url
+  redis_password    = redis_parsed_url.auth.split(":")[1]
+  redis             = redislib.createClient redis_parsed_url.port, redis_parsed_url.hostname, { auth_pass: true }
+  redis_block       = redislib.createClient redis_parsed_url.port, redis_parsed_url.hostname, { auth_pass: true }
+  redis.auth        redis_password
+  redis_block.auth  redis_password
 else # If no Redis URL exists, we try to just connect to localhost
   redis       = redislib.createClient()
   redis_block = redislib.createClient()
