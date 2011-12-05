@@ -1,7 +1,7 @@
 digraph Readme {
   bgcolor="#F8F8F8"
   Schlep [style = filled, fillcolor="#99FF99",label="Schlep", fontname="sans", fontsize=18];
-  Application -> Schlep [label=" Event"]
+  Application -> Schlep [label=" Events"]
   Schlep -> Storage
   Schlep -> "Queue Workers"
   Schlep -> "Bus Listeners"
