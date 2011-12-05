@@ -29,7 +29,7 @@ schlep:statistic:types        # (Sorted set) All types seen, with counters
 
 ## Envelope
 
-The string submitted should be valid JSON, formatted as follows:
+The string submitted should be valid JSON/BSON, formatted as follows:
 
 ```js
 {
