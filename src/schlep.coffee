@@ -1,3 +1,5 @@
+console.log "\nSchlep 0.0.0"
+
 redislib = require 'redis'
 url      = require 'url'
 
