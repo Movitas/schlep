@@ -22,7 +22,6 @@ redis.on 'ready', ->
   createProcessor()
 
 createProcessor = ->
-  console.log("New processor")
   redis.blpop "schlep", 0, (err, data) ->
     console.log(err) if err
     handleInput(data[1])
