@@ -1,13 +1,16 @@
-console.log "\nSchlep 0.0.0"
-
 http     = require 'http'
+fs       = require 'fs'
 redislib = require 'redis'
 url      = require 'url'
+
+package = JSON.parse(fs.readFileSync("package.json", 'utf8'))
+
+console.log "#{package.name} #{package.version}"
 
 # We need an HTTP server so that Heroku knows we're alive
 http.createServer( (req, res) ->
   res.writeHead 200, {'Content-Type': 'text/plain'}
-  res.end 'Schlep 0.0.0\n'
+  res.end "#{package.name} #{package.version}\n"
 ).listen process.env.PORT or 3000
 
 # The Redis server is parsed from a URL
