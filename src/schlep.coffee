@@ -27,8 +27,8 @@ else # If no Redis URL exists, we try to just connect to localhost
   redis       = redislib.createClient()
   redis_block = redislib.createClient()
 
-redis.on 'error', (err) ->
-  console.log "Redis error: #{err}"
+redis.on       'error', (err) -> console.log "redis error: #{err}"
+redis_block.on 'error', (err) -> console.log "redis_block error: #{err}"
 
 # Once Redis is ready, we can start processing envelopes from the queue
 redis.on 'ready', ->
