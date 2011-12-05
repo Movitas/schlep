@@ -34,7 +34,7 @@ redis.on 'ready', ->
   createProcessor()
 
 # A processor does a blocking-left-pop on the schlep key. When a message is
-# received and processed, it simply spawns another one of itself
+# received and processed, it simply spawns another one of itself.
 createProcessor = ->
   redis_block.blpop "schlep", 0, (err, data) ->
     console.log err if err
@@ -50,7 +50,7 @@ handleInput = (data) ->
     return
 
   # If the validation fails, we just exit, since the validation error is
-  # already output by the validtion function
+  # already output by the validation function
   return unless validateEnvelope(envelope)
 
   # All messages are published to an event key for each type
@@ -73,10 +73,10 @@ handleInput = (data) ->
 validateEnvelope = (envelope) ->
   requiredAttributes = {
     timestamp:  /^[0-9]*.?[0-9]*$/, # Numeric float
-    app:        /[a-zA-Z0-9]*/, # Alphanumeric
-    host:       /[a-zA-Z0-9]*/, # Alphanumeric
-    type:       /[a-z_]*/, # Lowercase and underscores
-    message:    null # We don't validate the actual message content
+    app:        /[a-zA-Z0-9]*/,     # Alphanumeric
+    host:       /[a-zA-Z0-9]*/,     # Alphanumeric
+    type:       /[a-z_]*/,          # Lowercase and underscores
+    message:    null                # We don't validate the actual message content
   }
 
   # For each top-level attribute, check that it exists, and that is passes regex validation
