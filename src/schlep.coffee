@@ -15,10 +15,12 @@ redis_url = process.env.REDIS_URL or process.env.REDISTOGO_URL
 if redis_url
   redis_parsed_url = url.parse redis_url
   redis_password = redis_parsed_url.auth.split(":")[1]
-  redis = redislib.createClient redis_parsed_url.port, redis_parsed_url.hostname
+  redis       = redislib.createClient redis_parsed_url.port, redis_parsed_url.hostname
+  redis_block = redislib.createClient redis_parsed_url.port, redis_parsed_url.hostname
   redis.auth redis_password
 else
-  redis = redislib.createClient()
+  redis       = redislib.createClient()
+  redis_block = redislib.createClient()
 
 redis.on 'error', (err) ->
   console.log "Redis error: #{err}"
@@ -27,9 +29,9 @@ redis.on 'ready', ->
   createProcessor()
 
 createProcessor = ->
-  redis.blpop "schlep", 0, (err, data) ->
-    console.log(err) if err
-    handleInput(data[1])
+  redis_block.blpop "schlep", 0, (err, data) ->
+    console.log err if err
+    handleInput data[1]
     createProcessor()
 
 handleInput = (data) ->
