@@ -22,9 +22,9 @@ schlep:queue:{type} # (List) Queues for workers
 schlep:event:{type} # (Pub/Sub) Channels for listening to events
 
 # Statistics
-schlep:apps         # (Sorted set) All apps seen, with counters
-schlep:hosts        # (Sorted set) All hosts seen, with counters
-schlep:types        # (Sorted set) All types seen, with counters
+schlep:statistic:apps         # (Sorted set) All apps seen, with counters
+schlep:statistic:hosts        # (Sorted set) All hosts seen, with counters
+schlep:statistic:types        # (Sorted set) All types seen, with counters
 ```
 
 ## Envelope
