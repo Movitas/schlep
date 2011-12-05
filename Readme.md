@@ -33,13 +33,13 @@ The string submitted should be valid JSON/BSON, formatted as follows:
 
 ```js
 {
-    timestamp: 1322770966.80738,
-    app: "Test",
-    host: "localhost"
-    type: "something",
-    message: {
-        a: 1,
-        b: "two"
+    "timestamp": 1322770966.80738,
+    "app": "Test",
+    "host": "localhost"
+    "type": "something",
+    "message": {
+        "a": 1,
+        "b": "two"
     }
 }
 ```
