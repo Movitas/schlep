@@ -8,23 +8,23 @@ Schlep provides a simple interface for logging and broadcasting events.
 
 ```
 # Input
-schlep              # (List) Input queue for all events
+schlep                  # (List) Input queue for all events
 
 # Storage
-schlep:stores       # (Set)  Types that will be stored in MongoDB
-schlep:store:{type} # (List) Queues for storage
+schlep:stores           # (Set)  Types that will be stored in MongoDB
+schlep:store:{type}     # (List) Queues for storage
 
 # Queues
-schlep:queues       # (Set)  Types that will be sent to worker queues
-schlep:queue:{type} # (List) Queues for workers
+schlep:queues           # (Set)  Types that will be sent to worker queues
+schlep:queue:{type}     # (List) Queues for workers
 
 # Events
-schlep:event:{type} # (Pub/Sub) Channels for listening to events
+schlep:event:{type}     # (Pub/Sub) Channels for listening to events
 
 # Statistics
-schlep:statistic:apps         # (Sorted set) All apps seen, with counters
-schlep:statistic:hosts        # (Sorted set) All hosts seen, with counters
-schlep:statistic:types        # (Sorted set) All types seen, with counters
+schlep:statistic:apps   # (Sorted set) All apps seen, with counters
+schlep:statistic:hosts  # (Sorted set) All hosts seen, with counters
+schlep:statistic:types  # (Sorted set) All types seen, with counters
 ```
 
 ## Envelope
