@@ -38,10 +38,10 @@ redis_block.on 'ready', -> createProcessor()
 createProcessor = ->
   redis_block.blpop "schlep", 0, (err, data) ->
     console.log err if err
-    handleInput data[1]
+    handleEnvelope data[1]
     createProcessor()
 
-handleInput = (data) ->
+handleEnvelope = (data) ->
   # We validate the envelope against JSON before doing anything
   try
     envelope = JSON.parse(data)
@@ -90,5 +90,3 @@ validateEnvelope = (envelope) ->
 
   # Validation is ok, return true
   true
-
-
