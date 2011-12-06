@@ -47,11 +47,18 @@ The string submitted should be valid JSON, formatted as follows:
 ## Reference implementation
 
 ```rb
-class Schlep
-  require 'json'
-  require 'redis'
+require 'json'
+require 'redis'
+require 'singleton'
 
-  def self.event(type, message)
+class Schlep
+  include Singleton
+  
+  def initialize(redis_url=nil)
+    @redis = Redis.new
+  end
+
+  def event(type, message)
     # json validation/conversion
     # message = message.to_json unless message.is_a? String
 
@@ -63,7 +70,11 @@ class Schlep
       :message => message
     }.to_json
 
-    Redis.rpush 'schlep', envelope
+    @redis.rpush 'schlep', envelope
+  end
+  
+  def self.event(options*)
+    self.instance.event options
   end
 end
 
