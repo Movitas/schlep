@@ -48,23 +48,23 @@ The string submitted should be valid JSON, formatted as follows:
 
 ```rb
 class Schlep
-    require 'json'
-    require 'redis'
+  require 'json'
+  require 'redis'
 
-    def self.event(type, message)
-        # json validation/conversion
-        # message = message.to_json unless message.is_a? String
+  def self.event(type, message)
+    # json validation/conversion
+    # message = message.to_json unless message.is_a? String
 
-        envelope = {
-            :timestamp => Time.now.to_f,
-            :app => "Test",
-            :host => `hostname`.split(".").first,
-            :type => type, 
-            :message => message
-        }.to_json
+    envelope = {
+      :timestamp => Time.now.to_f,
+      :app => "Test",
+      :host => `hostname`.split(".").first,
+      :type => type
+      :message => message
+    }.to_json
 
-        Redis.rpush 'schlep', envelope
-    end
+    Redis.rpush 'schlep', envelope
+  end
 end
 
 Schlep.event "test", { :schlep => "rocks" }
