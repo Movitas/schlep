@@ -47,14 +47,14 @@ The string submitted should be valid JSON, formatted as follows:
 ## Reference implementation
 
 ```rb
-class Schlepper
+class Schlep
     require 'json'
     require 'redis'
 
-    def self.schlep(type, message)
+    def self.event(type, message)
         # json validation/conversion
         # message = message.to_json unless message.is_a? String
-    
+
         envelope = {
             :timestamp => Time.now.to_f,
             :app => "Test",
@@ -62,12 +62,12 @@ class Schlepper
             :type => type, 
             :message => message
         }.to_json
-        
+
         Redis.rpush 'schlep', envelope
     end
 end
 
-Schlepper.schlep "test", { :schlep => "rocks" }
+Schlep.event "test", { :schlep => "rocks" }
 ```
 
 
