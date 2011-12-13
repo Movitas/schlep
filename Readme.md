@@ -47,39 +47,5 @@ The string submitted should be valid JSON, formatted as follows:
 
 ## Reference implementation
 
-```rb
-require 'json'
-require 'redis'
-require 'singleton'
-
-class Schlep
-  include Singleton
-  
-  def initialize(redis_url=nil)
-    @redis = Redis.new
-  end
-
-  def event(type, message)
-    # json validation/conversion
-    # message = message.to_json unless message.is_a? String
-
-    envelope = {
-      :timestamp => Time.now.to_f,
-      :app => "Test",
-      :host => `hostname`.split(".").first,
-      :type => type
-      :message => message
-    }.to_json
-
-    @redis.rpush 'schlep', envelope
-  end
-  
-  def self.event(options*)
-    self.instance.event options
-  end
-end
-
-Schlep.event "test", { :schlep => "rocks" }
-```
-
-
+There's a Ruby client over at [Movitas/schlep-ruby](http://github.com/Movitas/schlep-ruby).
+That's probably the best place to start if you're interested in building your own client in another language.
