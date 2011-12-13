@@ -68,7 +68,7 @@ handleEnvelope = (data) ->
     redis.zincrby "schlep:statistic:#{statistic}", 1, envelope[statistic]
 
   # Output the envelope for debugging
-  console.dir envelope
+  # console.dir envelope
 
 validateEnvelope = (envelope) ->
   requiredAttributes = {
