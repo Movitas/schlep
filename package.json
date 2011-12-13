@@ -2,7 +2,7 @@
     "name": "schlep",
     "description": "Schlep provides a simple interface for logging and broadcasting events.",
     "author": "Justin Campbell",
-    "version": "0.0.0",
+    "version": "0.1.0",
     "licenses": [{
         "type": "MIT",
         "url": "https://github.com/Movitas/schlep/raw/master/LICENSE"
