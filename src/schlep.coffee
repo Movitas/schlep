@@ -30,8 +30,20 @@ else # If no Redis URL exists, we try to just connect to localhost
 redis.on       'error', (err) -> console.log "redis error: #{err}"
 redis_block.on 'error', (err) -> console.log "redis_block error: #{err}"
 
-# Once Redis is ready, we can start processing envelopes from the queue
-redis_block.on 'ready', -> createProcessor()
+# Create processed counter for info output
+processed = 0
+
+redis_block.on 'ready', ->
+  # Once Redis is ready, we can start processing envelopes from the queue
+  createProcessor()
+
+  # Output the processed counter and queue length, but only if we did work in the past second
+  setInterval ->
+    redis.llen "schlep", (err, data) ->
+      console.log err if err
+      console.log "#{processed}/sec, #{data} queued" if processed > 0
+      processed = 0
+  , 1000
 
 # A processor does a blocking-left-pop on the schlep key. When a message is
 # received and processed, it simply spawns another one of itself.
@@ -62,6 +74,10 @@ handleEnvelope = (data) ->
     console.log err if err
     if sIsMember
       redis.rpush "schlep:queue:#{envelope.type}", JSON.stringify envelope
+
+  # Increment the processed counter
+  processed += 1
+  redis.zincrby "schlep:statistics", 1, "total"
 
   # Increment statistic keys
   for statistic in ["app", "host", "type"]
