@@ -1,5 +1,6 @@
 http     = require 'http'
 fs       = require 'fs'
+mongodb  = require 'mongodb'
 redislib = require 'redis'
 url      = require 'url'
 
@@ -43,6 +44,7 @@ redis_store.on  'error', (err) -> console.log "redis_store  error: #{err}"
 
 # Create processed counter for info output
 processed = 0
+storage = 0
 
 redis.on 'ready', ->
   # Once Redis is ready, we can start processing envelopes from the queue
@@ -53,8 +55,15 @@ redis.on 'ready', ->
   setInterval ->
     redis.llen "schlep", (err, data) ->
       console.log err if err
-      console.log "#{processed}/sec, #{data} queued" if processed > 0
+      console.log "schlep #{processed}/sec, #{data} queued" if processed > 0
       processed = 0
+  , 1000
+
+  setInterval ->
+    redis.llen "schlep:storage:queue", (err, data) ->
+      console.log err if err
+      console.log "storage #{storage}/sec, #{data} queued" if storage > 0
+      storage = 0
   , 1000
 
 # Processors do a blocking-left-pop on a key. When a message is received and
@@ -71,7 +80,7 @@ createSchlepProcessor = ->
 createStorageProcessor = ->
   redis_store.blpop "schlep:storage:queue", 0, (err, data) ->
     console.log err if err
-    storeEnvelope data[1]
+    storeEnvelope JSON.parse(data[1])
     createStorageProcessor()
 
 handleEnvelope = (data) ->
@@ -135,5 +144,22 @@ validateEnvelope = (envelope) ->
   # Validation is ok, return true
   true
 
+db_handler = null
+
+mongodb_client = new mongodb.Db "schlep", (new mongodb.Server "127.0.0.1", 27017, {})
+mongodb_client.open (error, db) ->
+  if error
+    console.dir error
+  else
+    db_handler = db
+
 storeEnvelope = (envelope) ->
-  console.dir (envelope)
+  storage += 1
+
+  db_handler.collection envelope['type'], (error, collection) ->
+    if error
+      console.dir error
+    else
+      collection.save envelope, (error, documents) ->
+        if error
+          console.dir error
