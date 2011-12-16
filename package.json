@@ -15,7 +15,7 @@
     "dependencies": {
       "coffee-script": "~1.1",
       "hiredis": "~0.1",
-      "mongodb": "",
+      "mongodb": "~0.9",
       "redis": "~0.7"
     },
     "devDependencies": {
