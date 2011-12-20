@@ -1,0 +1,43 @@
+<!DOCTYPE html>  <html> <head>   <title>mongo.coffee</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>            <div id="jump_to">         Jump To &hellip;         <div id="jump_wrapper">           <div id="jump_page">                                           <a class="source" href="envelope.html">                 envelope.coffee               </a>                                           <a class="source" href="http_server.html">                 http_server.coffee               </a>                                           <a class="source" href="input_processor.html">                 input_processor.coffee               </a>                                           <a class="source" href="mongo.html">                 mongo.coffee               </a>                                           <a class="source" href="redis.html">                 redis.coffee               </a>                                           <a class="source" href="schlep.html">                 schlep.coffee               </a>                                           <a class="source" href="storage_processor.html">                 storage_processor.coffee               </a>                                           <a class="source" href="utility.html">                 utility.coffee               </a>                        </div>         </div>       </div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               mongo.coffee             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>                            </td>             <td class="code">               <div class="highlight"><pre><span class="nv">mongodb = </span><span class="nx">require</span> <span class="s1">&#39;mongodb&#39;</span>
+<span class="nv">url     = </span><span class="nx">require</span> <span class="s1">&#39;url&#39;</span>
+
+<span class="nv">module.exports = </span><span class="k">class</span> <span class="nx">Mongo</span>
+  <span class="nv">constructor: </span><span class="o">-&gt;</span>
+    <span class="vi">@database = </span><span class="s2">&quot;schlep&quot;</span>
+    <span class="vi">@hostname = </span><span class="s2">&quot;127.0.0.1&quot;</span>
+    <span class="vi">@port = </span><span class="mi">27017</span>
+    <span class="vi">@url = </span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">MONGO_URL</span> <span class="o">or</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">MONGODB_URL</span> <span class="o">or</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">MONGOHQ_URL</span>
+
+    <span class="k">if</span> <span class="nx">@url</span>
+      <span class="vi">@parsedUrl = </span><span class="nx">url</span><span class="p">.</span><span class="nx">parse</span> <span class="nx">@url</span>
+      <span class="vi">@auth     = </span><span class="nx">@parsedUrl</span><span class="p">.</span><span class="nx">auth</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>        <span class="k">if</span> <span class="nx">@parsedUrl</span><span class="p">.</span><span class="nx">auth</span>
+      <span class="vi">@database = </span><span class="nx">@parsedUrl</span><span class="p">.</span><span class="nx">pathname</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="nx">@parsedUrl</span><span class="p">.</span><span class="nx">pathname</span>
+      <span class="vi">@hostname = </span><span class="nx">@parsedUrl</span><span class="p">.</span><span class="nx">hostname</span>
+      <span class="vi">@port     = </span><span class="nx">@parsedUrl</span><span class="p">.</span><span class="nx">port</span>                   <span class="k">if</span> <span class="nx">@parsedUrl</span><span class="p">.</span><span class="nx">port</span>
+
+    <span class="vi">@options = </span><span class="p">{</span>
+      <span class="nv">auto_reconnect: </span><span class="kc">true</span>
+    <span class="p">}</span>
+
+    <span class="vi">@client = </span><span class="k">new</span> <span class="nx">mongodb</span><span class="p">.</span><span class="nx">Db</span> <span class="nx">@database</span><span class="p">,</span> <span class="p">(</span><span class="k">new</span> <span class="nx">mongodb</span><span class="p">.</span><span class="nx">Server</span> <span class="nx">@hostname</span><span class="p">,</span> <span class="nx">@port</span><span class="p">,</span> <span class="nx">@options</span><span class="p">)</span>
+
+    <span class="nx">@client</span><span class="p">.</span><span class="nx">open</span> <span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">db</span><span class="p">)</span> <span class="o">=&gt;</span>
+      <span class="k">if</span> <span class="nx">error</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">error</span>
+      <span class="k">else</span>
+        <span class="vi">@db = </span><span class="nx">db</span>
+
+        <span class="k">if</span> <span class="nx">@auth</span>
+          <span class="nx">@db</span><span class="p">.</span><span class="nx">authenticate</span> <span class="nx">@auth</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nx">@auth</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nf">(err) -&gt;</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">err</span> <span class="k">if</span> <span class="nx">err</span>
+
+  <span class="nv">storeEnvelope: </span><span class="nf">(envelope) -&gt;</span>
+    <span class="nx">@db</span><span class="p">.</span><span class="nx">collection</span> <span class="nx">envelope</span><span class="p">.</span><span class="nx">type</span><span class="p">,</span> <span class="nf">(error, collection) -&gt;</span>
+      <span class="k">if</span> <span class="nx">error</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">error</span>
+      <span class="k">else</span>
+        <span class="nx">collection</span><span class="p">.</span><span class="nx">save</span> <span class="nx">envelope</span><span class="p">.</span><span class="nx">envelope</span><span class="p">,</span> <span class="nf">(error, documents) -&gt;</span>
+          <span class="k">if</span> <span class="nx">error</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">error</span>
+
+</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 
