@@ -24,6 +24,8 @@ module.exports = class Envelope
     for key, value of @REQUIRED_ATTRIBUTES
       this[key] = @envelope[key]
 
+    @sanitized_type = @type.replace /[^\w^\s]+/g, "."
+
   isValid: ->
     # Don't bother validating if we've already determined the JSON is invalid
     return false unless @validJson

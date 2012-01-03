@@ -32,7 +32,7 @@ module.exports = class Mongo
             console.log err if err
 
   storeEnvelope: (envelope) ->
-    @db.collection envelope.type, (error, collection) ->
+    @db.collection envelope.sanitized_type, (error, collection) ->
       if error
         console.log error
       else
