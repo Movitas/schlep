@@ -8,8 +8,9 @@ module.exports = class Redis
 
     if redisUrl
       parsedUrl  = url.parse redisUrl
-      password    = parsedUrl.auth.split(":")[1]
+      password   = parsedUrl.auth.split(":")[1]
       client = redis.createClient parsedUrl.port, parsedUrl.hostname, { auth_pass: true }
+      client.auth password if password
     else
       client = redis.createClient()
 
