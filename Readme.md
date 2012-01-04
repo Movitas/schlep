@@ -1,4 +1,4 @@
-# Schlep
+# Schlep [![Build Status](https://secure.travis-ci.org/Movitas/schlep.png)](https://secure.travis-ci.org/Movitas/schlep)
 
 Schlep provides a simple interface for logging and broadcasting events.
 
