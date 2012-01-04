@@ -28,8 +28,8 @@ module.exports = class Mongo
         @db = db
 
         if @auth
-          @db.authenticate @auth[0], @auth[1], (err) ->
-            console.log err if err
+          @db.authenticate @auth[0], @auth[1], (error) ->
+            console.log error if error
 
   storeEnvelope: (envelope) ->
     @db.collection envelope.sanitized_type, (error, collection) ->
