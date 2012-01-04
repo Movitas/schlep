@@ -1,7 +1,9 @@
+EventEmitter = require('events').EventEmitter
+
 mongodb = require 'mongodb'
 url     = require 'url'
 
-module.exports = class Mongo
+module.exports = class Mongo extends EventEmitter
   constructor: ->
     @database = "schlep"
     @hostname = "127.0.0.1"
@@ -28,8 +30,11 @@ module.exports = class Mongo
         @db = db
 
         if @auth
-          @db.authenticate @auth[0], @auth[1], (error) ->
+          @db.authenticate @auth[0], @auth[1], (error) =>
             console.log error if error
+            @emit "ready"
+        else
+          @emit "ready"
 
   storeEnvelope: (envelope) ->
     @db.collection envelope.sanitized_type, (error, collection) ->

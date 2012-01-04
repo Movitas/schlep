@@ -7,7 +7,9 @@ module.exports = class StorageProcessor
     @redis      = new Redis
     @redisBlock = new Redis
     @mongo      = new Mongo
-    @wait()
+
+    @mongo.on "ready", =>
+      @wait()
 
   wait: ->
     @redisBlock.blpop "schlep:storage:queue", 0, (err, data) =>
