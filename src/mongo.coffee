@@ -37,7 +37,7 @@ module.exports = class Mongo extends EventEmitter
           @emit "ready"
 
   storeEnvelope: (envelope) ->
-    @db.collection envelope.sanitized_type, (error, collection) ->
+    @db.collection envelope.sanitized_app, (error, collection) ->
       if error
         console.log error
       else

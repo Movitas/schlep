@@ -24,7 +24,10 @@ module.exports = class Envelope
     for key, value of @REQUIRED_ATTRIBUTES
       this[key] = @envelope[key]
 
-    @sanitized_type = @type.replace /[^\w\s]+/g, "."
+    @sanitized_app = @app
+    @sanitized_app = @sanitized_app.replace /[^\w\n]+/g, "_" # Replace special characters with underscores
+    @sanitized_app = @sanitized_app.replace /^_|_$/g, "" # Remove leading and trailing underscores
+    @sanitized_app = @sanitized_app.toLowerCase()
 
   isValid: ->
     # Don't bother validating if we've already determined the JSON is invalid
