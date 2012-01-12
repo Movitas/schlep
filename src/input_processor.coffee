@@ -40,7 +40,7 @@ module.exports = class InputProcessor
   # If the envelope type exists in schlep:storage:types, we push the envelope
   # to a the storage queue
   store: (envelope) ->
-    @redis.sismember "schlep:storage:types", envelope.type, (err, sIsMember) =>
+    @redis.sismember "schlep:storage:apps", envelope.sanitized_app, (err, sIsMember) =>
        console.log err if err
        if sIsMember
          @redis.rpush "schlep:storage:queue", envelope.json
